@@ -18,6 +18,11 @@ class ProductListView(generic.TemplateView):
     template_name = 'products/list.html'
 
     def get_context_data(self, **kwargs):
+        
+        product_count = Product.objects.count()
+        
         context = super().get_context_data(**kwargs)
         context['product'] = Product.objects.prefetch_related("product_variant_price").all()
+        context['product_count'] = product_count
+        
         return context
