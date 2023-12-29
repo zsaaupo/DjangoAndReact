@@ -39,8 +39,7 @@ class ProductListView(generic.TemplateView):
         if title:
             queryset = queryset.filter(title__icontains=title)
         if variant:
-            print(variant)
-            # queryset = queryset.filter(product_variant_price__variant__title=variant)
+            queryset = queryset.filter(product_variant__variant_title=variant)
         if price_from and price_to:
             queryset = queryset.filter(product_variant_price__price__range=(price_from, price_to))
         if date:
