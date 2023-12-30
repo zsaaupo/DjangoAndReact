@@ -16,16 +16,17 @@ class Product(TimeStampMixin):
     title = models.CharField(max_length=255)
     sku = models.SlugField(max_length=255, unique=True)
     description = models.TextField()
-
+    
     def __str__(self):
         return self.title
+    
 
 class ProductImage(TimeStampMixin):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     file_path = models.URLField()
 
     def __str__(self):
-        return self.product
+        return str(self.product)
 
 class ProductVariant(TimeStampMixin):
     variant_title = models.CharField(max_length=255)

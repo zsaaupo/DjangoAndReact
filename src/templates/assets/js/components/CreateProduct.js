@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import Dropzone from 'react-dropzone'
+import axios from 'axios';
 
 
 const CreateProduct = (props) => {
@@ -14,6 +15,9 @@ const CreateProduct = (props) => {
             tags: []
         }
     ])
+
+    const [uploadedFiles, setUploadedFiles] = useState([]);
+    
     console.log(typeof props.variants)
     // handle click event of the Add button
     const handleAddClick = () => {
@@ -74,10 +78,42 @@ const CreateProduct = (props) => {
         return ans;
     }
 
+    const handleDrop = (acceptedFiles) => {
+        // Update state with the uploaded files
+        setUploadedFiles(acceptedFiles);
+    
+        // Log the uploaded files
+        console.log('Uploaded Files:', acceptedFiles);
+      };
+
     // Save product
-    let saveProduct = (event) => {
+    let saveProduct = async (event) => {
         event.preventDefault();
-        // TODO : write your code here to save the product
+        console.log(productVariantPrices)
+
+        console.log(productVariants)
+
+        let productName = document.getElementById('product_name').value;
+        let productSKU = document.getElementById('product_sku').value;
+        let description = document.getElementById('description').value;
+
+        console.log(productName)
+        console.log(productSKU)
+        console.log(description)
+        console.log('Uploaded Files:', uploadedFiles);
+
+        let requestData = {
+            product_name: productName,
+            product_sku: productSKU,
+            description: description,
+        };
+
+        try {
+            const response = await axios.post('/product/new_product/', requestData);
+            console.log('Response:', response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
 
@@ -90,15 +126,15 @@ const CreateProduct = (props) => {
                             <div className="card-body">
                                 <div className="form-group">
                                     <label htmlFor="">Product Name</label>
-                                    <input type="text" placeholder="Product Name" className="form-control"/>
+                                    <input type="text" id="product_name" placeholder="Product Name" className="form-control"/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="">Product SKU</label>
-                                    <input type="text" placeholder="Product Name" className="form-control"/>
+                                    <input type="text" id="product_sku" placeholder="Product Name" className="form-control"/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="">Description</label>
-                                    <textarea id="" cols="30" rows="4" className="form-control"></textarea>
+                                    <textarea id="description" cols="30" rows="4" className="form-control"></textarea>
                                 </div>
                             </div>
                         </div>
